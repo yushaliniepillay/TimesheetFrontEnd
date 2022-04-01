@@ -1,15 +1,22 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import React from "react";
+import Nav from '../components/nav'
+import AddProject from '../components/Project/addProject'
+import ViewProject from '../components/Project/viewProject'
 
-export default function Home() {
+const Home = () => {
+
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-
+      <Nav />
+      <label className="flex justify-center py-5 font-serif text-3xl font-bold "> PROJECTS</label>
       
-    </div>
+      {/* modal pop up to add new project */}
+      <AddProject />
+      {/* view and edit existing project */}
+      <ViewProject />
+      
+    </div >
   )
 }
+
+export default Home

@@ -1,8 +1,5 @@
 import React from 'react'
-import getConfig from 'next/config'
 import { Button, Modal, ModalBody, ModalFooter } from "reactstrap"
-
-const { publicRuntimeConfig } = getConfig();
 
 const addProject = () => {
 

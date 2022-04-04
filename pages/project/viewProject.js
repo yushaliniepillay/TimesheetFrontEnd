@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ClipboardCheckIcon } from '@heroicons/react/outline'
 import fetch from 'isomorphic-unfetch'
-import AddProject from './addProject'
+import AddProject from '../project/addProject'
 
 const viewProject = ({ projects }) => {
 
@@ -11,6 +11,10 @@ const viewProject = ({ projects }) => {
 
     const [modalFormOpen, setModalFormOpen] = React.useState(false);
     const [modalSelected, setModalSelected] = React.useState(0);
+    const [Title, setProjectTitle] = React.useState('')
+    const [ClientName, setClientName] = React.useState('')
+    const [DateAdded, setProjectDate] = React.useState('')
+    const [Description, setProjectDescription] = React.useState('')
 
     const handleShow = (index) => {
         setModalSelected(index);
@@ -20,7 +24,33 @@ const viewProject = ({ projects }) => {
     function className(...classes) {
         return classes.filter(Boolean).join(' ')
     }
+//update new record in strapi
+async function editProj() {
 
+    const projectInfo = {
+        data: {
+            Title: [modalSelected].attributes.Title,
+            ClientName: [modalSelected].attributes.ClientName,
+            DateAdded: [modalSelected].attributes.DateAdded,
+            Description: [modalSelected].attributes.Description
+        }
+
+    }
+    const { API_URL } = process.env
+    console.log(JSON.stringify(projectInfo));
+
+    const update = await fetch(`${API_URL}/api/projects/${id}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(projectInfo)
+    })
+
+    const updateResponse = await update.json()
+    
+    console.log(updateResponse)
+}
     return (
         <div>
             <div className="px-4 py-5 sm:px-6 lg:px-8">
@@ -266,7 +296,8 @@ const viewProject = ({ projects }) => {
     )
 }
 
-export async function getServerSideProps() {
+//get data from strapi
+export async function getStaticProps() {
     const { API_URL } = process.env
 
     const res = await fetch(`${API_URL}/api/projects`)

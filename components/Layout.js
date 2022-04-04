@@ -11,11 +11,16 @@ import {
     XIcon,
     ClipboardCheckIcon,
 } from '@heroicons/react/outline'
+import Image from "next/image";
 import { SearchIcon } from '@heroicons/react/solid'
+
+
+const logo = require("../public/favicon.png")
+
 
 const sidebarNavigation = [
     { name: 'Home', href: '/home', icon: HomeIcon, current: true },
-    { name: 'Project', href: '/viewProject', icon: FolderIcon, current: false },
+    { name: 'Project', href: '/project/viewProject', icon: FolderIcon, current: false },
     { name: 'Timesheet', href: '#', icon: ClipboardCheckIcon, current: false },
     { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
     { name: 'Report', href: '#', icon: ChartBarIcon, current: false },
@@ -41,10 +46,11 @@ export default function Layout({ children }) {
                 {/* Narrow sidebar */}
                 <div className="hidden overflow-y-auto bg-gray-800 w-28 md:block">
                     <div className="flex flex-col items-center w-full py-6">
-                        <div className="flex items-center flex-shrink-0">
-                            <img
+                        <div className="flex items-center flex-shrink-0 ">
+                            <Image
                                 className="w-auto h-8"
-                                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
+                                //src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
+                                src={logo}
                                 alt="Avows"
                             />
                         </div>

@@ -163,7 +163,7 @@ const addProject = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="gap-4 mt-4 sm:mt-6">
+                                <div className="mt-6 sm:mt-6">
                                     <button
                                         type='button'
                                         onClick={() => addProj()}

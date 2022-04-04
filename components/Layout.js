@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
-    CogIcon,
+    BookOpenIcon,
     CalendarIcon,
     HomeIcon,
     MenuAlt2Icon,
@@ -19,12 +19,13 @@ const logo = require("../public/favicon.png")
 
 
 const sidebarNavigation = [
-    { name: 'Home', href: '/home', icon: HomeIcon, current: true },
+    { name: 'Home', href: '/index', icon: HomeIcon, current: true },
     { name: 'Project', href: '/project/viewProject', icon: FolderIcon, current: false },
-    { name: 'Timesheet', href: '#', icon: ClipboardCheckIcon, current: false },
+    { name: 'Timesheet', href: '/timesheet/viewTimesheet', icon: ClipboardCheckIcon, current: false },
     { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+    { name: 'Invoice', href: '#', icon: BookOpenIcon, current: false },
     { name: 'Report', href: '#', icon: ChartBarIcon, current: false },
-    { name: 'Settings', href: '#', icon: CogIcon, current: false },
+    
 ]
 
 const userNavigation = [

@@ -1,10 +1,9 @@
 import React from 'react'
 
 const viewTimesheet = () => {
-
     const tabs = [
-        { name: 'List of Timesheet', href: '#', current: true },
-        { name: 'New Entry', href: '#', current: false },
+        { name: 'List of Timesheet', href: '/timesheet/viewTimesheet', current: true },
+        { name: 'New Entry', href: '/timesheet/addTimesheet', current: false },
         // { name: 'Team Members', href: '#', current: false },
         // { name: 'Billing', href: '#', current: false },
     ]
@@ -21,6 +20,7 @@ const viewTimesheet = () => {
                 </label>
                 {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
                 <select
+                    onChange="location = this.value;"
                     id="tabs"
                     name="tabs"
                     className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
@@ -52,6 +52,24 @@ const viewTimesheet = () => {
                     </nav>
                 </div>
             </div>
+
+            <div className="px-4 py-5 sm:px-6 lg:px-8">
+                <div className="sm:flex sm:items-center">
+                    <div className="sm:flex-auto">
+                        <h1 className="text-xl font-semibold text-gray-900">PROJECTS</h1>
+                        <p className="mt-2 text-sm text-gray-700">
+                            A list of all the timesheet details.
+                        </p>
+                    </div>
+                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                        {/* modal pop up to add new project */}
+                        
+                    </div>
+                </div>
+
+
+            </div>
+
         </div>
 
     )

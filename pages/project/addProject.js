@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import { toast } from "react-toastify";
 // import { Button, Modal, ModalBody, ModalFooter } from "reactstrap"
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckCircleIcon, XIcon } from '@heroicons/react/solid'
@@ -37,7 +38,7 @@ const addProject = () => {
             </div>
         )
     }
-    
+
     //insert new record in strapi
     async function addProj() {
 
@@ -60,10 +61,18 @@ const addProject = () => {
             },
             body: JSON.stringify(projectInfo)
         })
+        if (projectInfo == '') {
+            toast.error("Please fill in the Input Field")
+        }
+        
+        if (!add.ok) {
+            toast.error("Something went wrong!")
+        } else {
+            const addResponse = await add.json()
+            toast.success('Sucessfully added');
+            console.log(addResponse)
+        }
 
-        const addResponse = await add.json()
-        alert('Sucessfully added');
-        console.log(addResponse)
     }
 
     //modal pop up 
@@ -74,7 +83,7 @@ const addProject = () => {
         setModalFormOpen(true)
         console.log(index)
     }
-    
+
     return (
         <div>
             <button className='inline-flex items-center px-5 py-3 ml-6 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'

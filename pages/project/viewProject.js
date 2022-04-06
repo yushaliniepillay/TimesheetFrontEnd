@@ -5,17 +5,21 @@ import { ClipboardCheckIcon } from '@heroicons/react/outline'
 import moment from 'moment';
 import fetch from 'isomorphic-unfetch'
 import AddProject from '../project/addProject'
+import EditProject from '../project/editProject';
 
-const viewProject = ({ projects }) => {
+const viewProject = ({ projects, id }) => {
 
     console.log(projects.data)
 
     const [modalFormOpen, setModalFormOpen] = React.useState(false);
     const [modalSelected, setModalSelected] = React.useState(0);
-    const [Title, setProjectTitle] = React.useState('')
-    const [ClientName, setClientName] = React.useState('')
-    const [DateAdded, setProjectDate] = React.useState('')
-    const [Description, setProjectDescription] = React.useState('')
+
+    const [idProject, setIdProject] = React.useState([]);//get all id from Database 
+
+    const [Title, setProjectTitle] = React.useState(projects.data[modalSelected].attributes.Title)
+    const [ClientName, setClientName] = React.useState(projects.data[modalSelected].attributes.ClientName)
+    const [DateAdded, setProjectDate] = React.useState(projects.data[modalSelected].attributes.DateAdded)
+    const [Description, setProjectDescription] = React.useState(projects.data[modalSelected].attributes.Description)
 
     const handleShow = (index) => {
         setModalSelected(index);
@@ -25,22 +29,24 @@ const viewProject = ({ projects }) => {
     function className(...classes) {
         return classes.filter(Boolean).join(' ')
     }
+    
+
     //update new record in strapi
-    async function editProj(projects) {
+    async function editProj(e) {
+        e.preventDefault();
+        const projectInfo = {
+            data: {
+                Title: Title,
+                ClientName: ClientName,
+                DateAdded: DateAdded,
+                Description: Description
+            }
 
-        // const projectInfo = {
-        //     data: {
-        //         Title: [modalSelected].attributes.Title,
-        //         ClientName: [modalSelected].attributes.ClientName,
-        //         DateAdded: [modalSelected].attributes.DateAdded,
-        //         Description: [modalSelected].attributes.Description
-        //     }
-
-        // }
+        }
         const { API_URL } = process.env
         console.log(JSON.stringify(projectInfo));
 
-        const update = await fetch(`${API_URL}/api/projects/${projects.id}`, {
+        const update = await fetch(`${API_URL}/api/projects/${id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -77,10 +83,9 @@ const viewProject = ({ projects }) => {
                                 <table className="min-w-full border-separate" style={{ borderSpacing: 0 }}>
                                     <thead className="bg-gray-50">
                                         <tr>
-                                            <th
-                                                scope="col"
-                                                className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
-                                            >Project Name</th>
+                                            <th scope="col"
+                                                className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">
+                                                Project Name</th>
                                             <th scope="col"
                                                 className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">
                                                 Date Added</th>
@@ -127,7 +132,9 @@ const viewProject = ({ projects }) => {
                                                     index !== project.length - 1 ? 'border-b border-gray-200' : '',
                                                     'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6 lg:pr-8'
                                                 )}>
-                                                    <button onClick={() => handleShow(index)} className="text-indigo-600 hover:text-indigo-900">
+                                                    <button onClick={() => handleShow(index)}
+                                                        data-target={`#id${project.id}`}
+                                                        className="text-indigo-600 hover:text-indigo-900">
                                                         Edit<span className="sr-only">, {project.attributes.Title}</span>
                                                     </button>
                                                     {/* <button className='text-indigo-600 hover:text-indigo-900'
@@ -146,9 +153,8 @@ const viewProject = ({ projects }) => {
                 </div>
             </div>
 
-
+            {/* modal popup */}
             <div>
-
                 <Transition.Root key={projects.data[modalSelected].id} show={modalFormOpen} as={Fragment}>
                     <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={setModalFormOpen}>
                         <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -232,7 +238,7 @@ const viewProject = ({ projects }) => {
                                     <div className="mt-5 sm:mt-6">
                                         <button
                                             type='button'
-                                            onClick={() => editProj(projects.id)}
+                                            onClick={() => editProj(projects)}
                                             className='inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm'>
                                             Save changes
                                         </button>
@@ -249,7 +255,7 @@ const viewProject = ({ projects }) => {
                     </Dialog>
                 </Transition.Root>
 
-                
+
             </div>
 
         </div>

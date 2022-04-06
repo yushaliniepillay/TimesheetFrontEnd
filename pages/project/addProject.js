@@ -64,11 +64,12 @@ const addProject = () => {
         if (projectInfo == '') {
             toast.error("Please fill in the Input Field")
         }
-        
+
         if (!add.ok) {
             toast.error("Something went wrong!")
         } else {
             const addResponse = await add.json()
+           
             toast.success('Sucessfully added');
             console.log(addResponse)
         }
@@ -92,6 +93,7 @@ const addProject = () => {
                 Add New Project
             </button>
 
+            {/* modal popup */}
             <Transition.Root key={[modalSelected]} show={modalFormOpen} as={Fragment}>
                 <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={setModalFormOpen}>
                     <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">

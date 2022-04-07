@@ -72,6 +72,7 @@ const addProject = () => {
            
             toast.success('Sucessfully added');
             console.log(addResponse)
+            location.reload()
         }
 
     }

@@ -1,16 +1,158 @@
-import React from 'react'
+import React, { Fragment, useState } from 'react'
+import { Dialog, Transition, Listbox } from '@headlessui/react'
+import { XIcon } from '@heroicons/react/outline'
+import { PlusSmIcon, CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import moment from 'moment'
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
+import ViewEntry from './viewEntry'
+
+let id = 0;
+const initialList = [];
 
 const addTimesheet = () => {
+
+  const activityType = [
+    { id: 1, name: 'Development' },
+    { id: 2, name: 'Maintenance' },
+    { id: 3, name: 'Meeting' },
+    { id: 4, name: 'Requirement' },
+    { id: 5, name: 'Testing' },
+    { id: 6, name: 'UAT' },
+    { id: 7, name: 'Others' },
+  ]
+
+
+  const [open, setOpen] = useState(false)
+  const [modalSelected, setModalSelected] = React.useState(0)
+  const handleShow = (index) => {
+    setModalSelected(index)
+    setOpen(true)
+    console.log(index)
+  }
+
+  const [list, setList] = useState(initialList);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("description...");
+  const [ts_date, setTs_Date] = useState(new Date());
+  const [fromTime, setFromTime] = useState(setHours(setMinutes(new Date(), 0), 9));
+  const [toTime, setToTime] = useState(setHours(setMinutes(new Date(), 30), 18));
+  const [duration, setDuration] = useState("");
+  const [selected, setSelected] = useState(activityType)
+
+
   const tabs = [
-    { name: 'List of Timesheet', href: '/timesheet/viewTimesheet', current: true },
-    { name: 'New Entry', href: '/timesheet/addTimesheet', current: false },
+    { name: 'List of Timesheet', href: '/timesheet/viewTimesheet', current: false },
+    { name: 'New Entry', href: '/timesheet/addTimesheet', current: true },
     // { name: 'Team Members', href: '#', current: false },
     // { name: 'Billing', href: '#', current: false },
   ]
 
-  function classNames(...classes) {
+  function className(...classes) {
     return classes.filter(Boolean).join(' ')
   }
+
+  const handleDelete = index_num => {
+    const lists = list.filter(list => list.id !== index_num);
+    setList([...lists]);
+  };
+
+  const handleChange = async e => {
+    e.preventDefault();
+    try {
+      ++id;
+      let date = moment(ts_date).format('YYYY-MM-DD');
+
+      // //call existing logic if, over lap cannot add
+      // //if overlap 
+      // let overLapTime = await getValue();
+      // console.log("getvalue " + `${overLapTime}`)
+      // let lap = overlap();
+      // console.log("lap " + `${lap}`)
+      // if (overLapTime === true || lap === true) {
+      //   console.log("overlapping time is error")
+      //   if (overLapTime === true) {
+      //     toast.error('There is overlap in database')
+      //   } else if (lap === true) {
+      //     toast.error('There is overlap in table entry');
+      //   }
+
+      //} else {
+      console.log("No overlapping!!!")
+      let tempDuration, beginTime, endTime;
+      if (duration > 0) {
+        //var empty = '2000-01-01 00:00:00';
+        var empty = null;
+        var hours = duration * 60;
+        tempDuration = hours;
+        beginTime = empty;
+        endTime = empty;
+      } else {
+        tempDuration = moment(toTime).diff(moment(fromTime), 'minutes');
+        beginTime = moment(fromTime).format("HH:mm");
+        endTime = moment(toTime).format("HH:mm");
+      }
+
+      console.log(tempDuration)
+      console.log(`Converting success ${beginTime} , ${endTime} , ${date}`)
+      var newList = list.concat([{ id, date, beginTime, endTime, tempDuration, title, selected, description }]);
+      setList(newList);
+      newList = null;
+      console.log(`${initialList} <-- This is initialList after HandleChnage executed`);
+
+      // }
+
+    } catch (err) {
+      console.error(err.message)
+    }
+    clearForm();
+  }
+
+  const clearForm = () => {
+    var frm = document.getElementsByName('task_form')[0];
+    //frm.reset();
+    try {
+      //setTitle('');
+      //setDescription('');
+      //setActivityType('');
+      setFromTime('');
+      setToTime('');
+      setDuration('');
+
+      frm.reset();
+
+    } catch (error) {
+      console.error(error.message);
+    }
+
+  }
+
+  const onClickClear = (i) => {
+
+    try {
+      setList([]);
+      if (i === 0) {
+        toast.info(`Tasks array cleared`);
+        clearForm();
+      } else {
+        if (list === [] || list.length === 0 || list === undefined) {
+          toast.warning(`Nothing recorded`);
+          clearForm();
+        } else {
+          toast.success(`Tasks recorded`, {
+            // Set to 15sec 
+            position: toast.POSITION.TOP_CENTER, autoClose: 4000
+          });
+          clearForm();
+        }
+
+      }
+
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
 
   return (
     <div>
@@ -38,7 +180,7 @@ const addTimesheet = () => {
               <a
                 key={tab.name}
                 href={tab.href}
-                className={classNames(
+                className={className(
                   tab.current
                     ? 'border-indigo-500 text-indigo-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
@@ -53,10 +195,275 @@ const addTimesheet = () => {
         </div>
       </div>
 
-      <h1>adddd</h1>
+      <div className="px-4 py-5 sm:px-6 lg:px-8">
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto">
+            <h1 className="text-xl font-semibold text-gray-900">List of Timesheet Entries</h1>
 
+          </div>
+          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            {/* modal pop up to add new project */}
+            <button
+              type="button"
+              onClick={() => handleShow()}
+              className="flex items-center justify-center p-1 text-white bg-indigo-600 rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <PlusSmIcon className="w-6 h-6" aria-hidden="true" />
+              <span className="sr-only">Add entry</span>
+            </button>
+
+          </div>
+        </div>
+
+        {/* list of view entry */}
+        <ViewEntry list={list} onDelete={handleDelete} onDeleteSubmit={onClickClear} />
+
+
+        {/* modal side pop up */}
+        <div>
+          <Transition.Root key={[modalSelected]} show={open} as={Fragment}>
+            <Dialog as="div" className="fixed inset-y-12 overflow-hidden" onClose={setOpen}>
+              <div className="absolute inset-0 overflow-hidden">
+                <Dialog.Overlay className="absolute inset-0" />
+
+                <div className="pointer-events-none fixed right-0 flex max-w-full pl-10 sm:pl-16">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="transform transition ease-in-out duration-500 sm:duration-700"
+                    enterFrom="translate-x-full"
+                    enterTo="translate-x-0"
+                    leave="transform transition ease-in-out duration-500 sm:duration-700"
+                    leaveFrom="translate-x-0"
+                    leaveTo="translate-x-full"
+                  >
+                    <div className="pointer-events-auto w-screen max-w-md">
+                      <form onSubmit={handleChange} name='task_form' id='form_id_1'
+                        className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                        <div className="flex flex-col min-h-0 flex-1 overflow-auto">
+                          <div className="bg-indigo-700 py-6 px-4 sm:px-6">
+                            <div className="flex items-center justify-between">{/* close button */}
+                              <Dialog.Title className="text-lg font-medium text-white"> New Entry </Dialog.Title>
+                              <div className="ml-3 flex h-7 items-center">
+                                <button
+                                  type="button"
+                                  className="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                                  onClick={() => setOpen(false)}
+                                >
+                                  <span className="sr-only">Close panel</span>
+                                  <XIcon className="h-6 w-6" aria-hidden="true" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="mt-1">
+                              <p className="text-sm text-indigo-300">
+                                Get started by filling in the information below to insert your new entry.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex flex-1 flex-col justify-between">
+                            <div className="divide-y divide-gray-200 px-4 sm:px-6">
+                              <div className="space-y-6 pt-6 pb-5">
+                                {/* <div>
+                                  <label htmlFor="project-name" className="block text-sm font-medium text-gray-900">
+                                    Project name
+                                  </label>
+                                  <div className="mt-1">
+                                    <input
+                                      type="text"
+                                      value={title}
+                                      onChange={e => setTitle(e.target.value)}
+                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                  </div>
+                                </div> */}
+                                {/* <div>
+                                  <label htmlFor="entry-date" className="block text-sm font-medium text-gray-900">
+                                    Entry Date
+                                  </label>
+                                  <div className="mt-1">
+                                    <input
+                                      type="date"
+                                      value={ts_date}
+                                      onChange={e => setTs_Date(e.target.value)}
+                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                  </div>
+                                </div> */}
+                                <div>
+                                  <label htmlFor="input_duration" className="block text-sm font-medium text-gray-900">
+                                    {' '}
+                                    Duration{' '}
+                                  </label>
+                                  <div className="mt-1">
+                                    <input
+                                      type="number"
+                                      step={0.01}
+                                      max='23.59'
+                                      min='0'
+                                      id="input_duration"
+                                      value={duration}
+                                      onChange={e => setDuration(e.target.value)}
+                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                  </div>
+                                </div>
+                                {/* <div>
+                                  <label htmlFor="input_startTime" className="block text-sm font-medium text-gray-900">
+                                    {' '}
+                                    Start Time{' '}
+                                  </label>
+                                  <div className="mt-1">
+                                    <input
+                                      type="time"
+                                      id="input_startTime"
+                                      value={fromTime}
+                                      onChange={e => setFromTime(e.target.value)}
+                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                  </div> 
+                                </div>*/}
+                                {/* <div>
+                                  <label htmlFor="input_endTime" className="block text-sm font-medium text-gray-900">
+                                    {' '}
+                                    End Time{' '}
+                                  </label>
+                                  <div className="mt-1">
+                                    <input
+                                      type="time"
+                                      id="input_endTime"
+                                      value={toTime}
+                                      minTime={fromTime}
+                                      onChange={e => setToTime(e.target.value)}
+                                      className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                  </div>
+                                </div> */}
+
+                                {/* Activity type */}
+                                <div>
+                                  <label htmlFor="activity-type" className="block text-sm font-medium text-gray-900">
+                                    {' '}
+                                    Activity Type{' '}
+                                  </label>
+                                  <div className="mt-1">
+
+                                    <Listbox value={selected} onChange={setSelected} >
+                                      {({ open }) => (
+                                        <>
+                                          {/* <Listbox.Label className="block text-sm font-medium text-gray-700">Activity Type</Listbox.Label> */}
+
+                                          <Listbox.Button className="block bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                            <span className="block truncate">{selected.name}</span>
+                                            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                              <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                            </span>
+                                          </Listbox.Button>
+
+                                          <Transition
+                                            show={open}
+                                            as={Fragment}
+                                            leave="transition ease-in duration-100"
+                                            leaveFrom="opacity-100"
+                                            leaveTo="opacity-0"
+                                          >
+                                            <Listbox.Options className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                              {activityType.map((acttype) => (
+                                                <Listbox.Option
+                                                  key={acttype.id}
+                                                  className={({ active }) =>
+                                                    className(
+                                                      active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                                      'cursor-default select-none relative py-2 pl-3 pr-9'
+                                                    )
+                                                  }
+                                                  value={acttype}
+                                                >
+                                                  {({ selected, active }) => (
+                                                    <>
+                                                      <span className={className(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                        {acttype.name}
+                                                      </span>
+
+                                                      {selected ? (
+                                                        <span
+                                                          className={className(
+                                                            active ? 'text-white' : 'text-indigo-600',
+                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                          )}
+                                                        >
+                                                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                        </span>
+                                                      ) : null}
+                                                    </>
+                                                  )}
+                                                </Listbox.Option>
+                                              ))}
+                                            </Listbox.Options>
+                                          </Transition>
+                                        </>
+                                      )}
+                                    </Listbox>
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label htmlFor="description" className="block text-sm font-medium text-gray-900">
+                                    {' '}
+                                    Description{' '}
+                                  </label>
+                                  <div className="mt-1">
+                                    <textarea
+                                      placeholder="Task Description..."
+                                      onChange={e => setDescription(e.target.value)}
+                                      rows={3}
+                                      className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-shrink-0 justify-end px-4 py-4">
+                          <button
+                            type="button"
+                            className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            onClick={() => clearForm()} >
+                            Clear
+                          </button>
+                          <button
+                            type="submit"
+                            //onClick={() => handleChange()}
+                            className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" >
+                            Add
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition.Root>
+        </div>
+
+      </div>
     </div>
   )
+}
+
+//get data from strapi
+export async function getStaticProps() {
+  const { API_URL } = process.env
+
+  const res = await fetch(`${API_URL}/api/timesheet-entries`)
+  const data = await res.json()
+
+  return {
+    props: {
+      timesheetentries: data
+    }
+  }
 }
 
 export default addTimesheet

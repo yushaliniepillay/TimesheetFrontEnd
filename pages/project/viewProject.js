@@ -26,6 +26,7 @@ const viewProject = ({ projects, id }) => {
         setModalFormOpen(true);
         console.log(index);
     }
+
     function className(...classes) {
         return classes.filter(Boolean).join(' ')
     }
@@ -151,6 +152,7 @@ const viewProject = ({ projects, id }) => {
                         </div>
                     </div>
                 </div>
+
             </div>
 
             {/* modal popup */}

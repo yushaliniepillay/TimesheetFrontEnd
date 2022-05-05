@@ -4,9 +4,9 @@ import SubmitArray from './submitArray'
 
 const viewEntry = (props) => {
 
-    function className(...classes) {
-        return classes.filter(Boolean).join(' ')
-    }
+    // function className(...classes) {
+    //     return classes.filter(Boolean).join(' ')
+    // }
 
     const formatDate = (value) => {
         let date = moment(value).format('DD-MM-YYYY');

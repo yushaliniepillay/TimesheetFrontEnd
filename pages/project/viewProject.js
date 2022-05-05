@@ -5,7 +5,7 @@ import { ClipboardCheckIcon } from '@heroicons/react/outline'
 import moment from 'moment';
 import fetch from 'isomorphic-unfetch'
 import AddProject from '../project/addProject'
-import EditProject from '../project/editProject';
+import EditProject from '../project/editProject'
 
 const viewProject = ({ projects, id }) => {
 

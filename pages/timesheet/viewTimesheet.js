@@ -184,5 +184,17 @@ export async function getStaticProps() {
         }
     }
 }
+// export async function getStaticProps() {
+//     const { API_URL } = process.env
+
+//     const res = await fetch(`${API_URL}/api/projects`)
+//     const data = await res.json()
+
+//     return {
+//         props: {
+//             projects: data
+//         }
+//     }
+// }
 
 export default viewTimesheet

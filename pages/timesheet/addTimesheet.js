@@ -131,11 +131,11 @@ const addTimesheet = () => {
 
     try {
       setList([]);
-      if (i === 0) {
+      if (i == 0) {
         toast.info(`Tasks array cleared`);
         clearForm();
       } else {
-        if (list === [] || list.length === 0 || list === undefined) {
+        if (list == [] || list.length == 0 || list == undefined) {
           toast.warning(`Nothing recorded`);
           clearForm();
         } else {
@@ -222,11 +222,11 @@ const addTimesheet = () => {
         {/* modal side pop up */}
         <div>
           <Transition.Root key={[modalSelected]} show={open} as={Fragment}>
-            <Dialog as="div" className="fixed inset-y-12 overflow-hidden" onClose={setOpen}>
+            <Dialog as="div" className="fixed overflow-hidden inset-y-12" onClose={setOpen}>
               <div className="absolute inset-0 overflow-hidden">
                 <Dialog.Overlay className="absolute inset-0" />
 
-                <div className="pointer-events-none fixed right-0 flex max-w-full pl-10 sm:pl-16">
+                <div className="fixed right-0 flex max-w-full pl-10 pointer-events-none sm:pl-16">
                   <Transition.Child
                     as={Fragment}
                     enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -236,21 +236,21 @@ const addTimesheet = () => {
                     leaveFrom="translate-x-0"
                     leaveTo="translate-x-full"
                   >
-                    <div className="pointer-events-auto w-screen max-w-md">
+                    <div className="w-screen max-w-md pointer-events-auto">
                       <form onSubmit={handleChange} name='task_form' id='form_id_1'
-                        className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
-                        <div className="flex flex-col min-h-0 flex-1 overflow-auto">
-                          <div className="bg-indigo-700 py-6 px-4 sm:px-6">
+                        className="flex flex-col h-full bg-white divide-y divide-gray-200 shadow-xl">
+                        <div className="flex flex-col flex-1 min-h-0 overflow-auto">
+                          <div className="px-4 py-6 bg-indigo-700 sm:px-6">
                             <div className="flex items-center justify-between">{/* close button */}
                               <Dialog.Title className="text-lg font-medium text-white"> New Entry </Dialog.Title>
-                              <div className="ml-3 flex h-7 items-center">
+                              <div className="flex items-center ml-3 h-7">
                                 <button
                                   type="button"
-                                  className="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                                  className="text-indigo-200 bg-indigo-700 rounded-md hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                                   onClick={() => setOpen(false)}
                                 >
                                   <span className="sr-only">Close panel</span>
-                                  <XIcon className="h-6 w-6" aria-hidden="true" />
+                                  <XIcon className="w-6 h-6" aria-hidden="true" />
                                 </button>
                               </div>
                             </div>
@@ -260,9 +260,9 @@ const addTimesheet = () => {
                               </p>
                             </div>
                           </div>
-                          <div className="flex flex-1 flex-col justify-between">
-                            <div className="divide-y divide-gray-200 px-4 sm:px-6">
-                              <div className="space-y-6 pt-6 pb-5">
+                          <div className="flex flex-col justify-between flex-1">
+                            <div className="px-4 divide-y divide-gray-200 sm:px-6">
+                              <div className="pt-6 pb-5 space-y-6">
                                 {/* <div>
                                   <label htmlFor="project-name" className="block text-sm font-medium text-gray-900">
                                     Project name
@@ -272,7 +272,7 @@ const addTimesheet = () => {
                                       type="text"
                                       value={title}
                                       onChange={e => setTitle(e.target.value)}
-                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div>
                                 </div> */}
@@ -285,7 +285,7 @@ const addTimesheet = () => {
                                       type="date"
                                       value={ts_date}
                                       onChange={e => setTs_Date(e.target.value)}
-                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div>
                                 </div> */}
@@ -303,7 +303,7 @@ const addTimesheet = () => {
                                       id="input_duration"
                                       value={duration}
                                       onChange={e => setDuration(e.target.value)}
-                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div>
                                 </div>
@@ -318,7 +318,7 @@ const addTimesheet = () => {
                                       id="input_startTime"
                                       value={fromTime}
                                       onChange={e => setFromTime(e.target.value)}
-                                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div> 
                                 </div>*/}
@@ -334,7 +334,7 @@ const addTimesheet = () => {
                                       value={toTime}
                                       minTime={fromTime}
                                       onChange={e => setToTime(e.target.value)}
-                                      className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                      className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div>
                                 </div> */}
@@ -352,10 +352,10 @@ const addTimesheet = () => {
                                         <>
                                           {/* <Listbox.Label className="block text-sm font-medium text-gray-700">Activity Type</Listbox.Label> */}
 
-                                          <Listbox.Button className="block bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                          <Listbox.Button className="relative block w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             <span className="block truncate">{selected.name}</span>
                                             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                              <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                              <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
                                             </span>
                                           </Listbox.Button>
 
@@ -366,7 +366,7 @@ const addTimesheet = () => {
                                             leaveFrom="opacity-100"
                                             leaveTo="opacity-0"
                                           >
-                                            <Listbox.Options className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <Listbox.Options className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                               {activityType.map((acttype) => (
                                                 <Listbox.Option
                                                   key={acttype.id}
@@ -391,7 +391,7 @@ const addTimesheet = () => {
                                                             'absolute inset-y-0 right-0 flex items-center pr-4'
                                                           )}
                                                         >
-                                                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                          <CheckIcon className="w-5 h-5" aria-hidden="true" />
                                                         </span>
                                                       ) : null}
                                                     </>
@@ -416,7 +416,7 @@ const addTimesheet = () => {
                                       placeholder="Task Description..."
                                       onChange={e => setDescription(e.target.value)}
                                       rows={3}
-                                      className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                      className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div>
                                 </div>
@@ -424,17 +424,17 @@ const addTimesheet = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex flex-shrink-0 justify-end px-4 py-4">
+                        <div className="flex justify-end flex-shrink-0 px-4 py-4">
                           <button
                             type="button"
-                            className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                             onClick={() => clearForm()} >
                             Clear
                           </button>
                           <button
                             type="submit"
                             //onClick={() => handleChange()}
-                            className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" >
+                            className="inline-flex justify-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" >
                             Add
                           </button>
                         </div>
@@ -453,17 +453,17 @@ const addTimesheet = () => {
 }
 
 //get data from strapi
-export async function getStaticProps() {
-  const { API_URL } = process.env
+// export async function getStaticProps() {
+//   const { API_URL } = process.env
 
-  const res = await fetch(`${API_URL}/api/timesheet-entries`)
-  const data = await res.json()
+//   const res = await fetch(`${API_URL}/api/timesheet-entries`)
+//   const data = await res.json()
 
-  return {
-    props: {
-      timesheetentries: data
-    }
-  }
-}
+//   return {
+//     props: {
+//       timesheetentries: data
+//     }
+//   }
+// }
 
 export default addTimesheet

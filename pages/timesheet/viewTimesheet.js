@@ -6,7 +6,7 @@ const viewTimesheet = ({ timesheetentries }) => {
 
     const tabs = [
         { name: 'List of Timesheet', href: '/timesheet/viewTimesheet', current: true },
-        { name: 'New Entry', href: '/timesheet/addTimesheet', current: false },
+        { name: 'New Entry', href: '/timesheet/addTimesheet1', current: false },
         // { name: 'Team Members', href: '#', current: false },
         // { name: 'Billing', href: '#', current: false },
     ]

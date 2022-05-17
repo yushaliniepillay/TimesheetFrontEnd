@@ -10,7 +10,7 @@ import ViewEntry from './viewEntry'
 let id = 0;
 const initialList = [];
 
-const addTimesheet = () => {
+const addTimesheet1 = () => {
 
   const activityType = [
     { id: 1, name: 'Development' },
@@ -23,7 +23,7 @@ const addTimesheet = () => {
   ]
 
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   const [modalSelected, setModalSelected] = React.useState(0)
   const handleShow = (index) => {
     setModalSelected(index)
@@ -50,106 +50,6 @@ const addTimesheet = () => {
     return classes.filter(Boolean).join(' ')
   }
 
-  const handleDelete = index_num => {
-    const lists = list.filter(list => list.id !== index_num);
-    setList([...lists]);
-  };
-
-  const handleChange = async () => {
-    
-    try {
-      ++id;
-      let date = moment(ts_date).format('YYYY-MM-DD');
-
-      // //call existing logic if, over lap cannot add
-      // //if overlap 
-      // let overLapTime = await getValue();
-      // console.log("getvalue " + `${overLapTime}`)
-      // let lap = overlap();
-      // console.log("lap " + `${lap}`)
-      // if (overLapTime === true || lap === true) {
-      //   console.log("overlapping time is error")
-      //   if (overLapTime === true) {
-      //     toast.error('There is overlap in database')
-      //   } else if (lap === true) {
-      //     toast.error('There is overlap in table entry');
-      //   }
-
-      //} else {
-      console.log("No overlapping!!!")
-      let tempDuration, beginTime, endTime;
-      if (duration > 0) {
-        //var empty = '2000-01-01 00:00:00';
-        var empty = null;
-        var hours = duration * 60;
-        tempDuration = hours;
-        beginTime = empty;
-        endTime = empty;
-      } else {
-        tempDuration = moment(toTime).diff(moment(fromTime), 'minutes');
-        beginTime = moment(fromTime).format("HH:mm");
-        endTime = moment(toTime).format("HH:mm");
-      }
-
-      console.log(tempDuration)
-      console.log(`Converting success ${beginTime} , ${endTime} , ${date}`)
-      var newList = list.concat([{ id, date, beginTime, endTime, tempDuration, title, selected, description }]);
-      setList(newList);
-      newList = null;
-      console.log(`${initialList} <-- This is initialList after HandleChnage executed`);
-
-      // }
-
-    } catch (err) {
-      console.error(err.message)
-    }
-    clearForm();
-  }
-
-  const clearForm = () => {
-    var frm = document.getElementsByName('task_form')[0];
-    //frm.reset();
-    try {
-      //setTitle('');
-      //setDescription('');
-      //setActivityType('');
-      setFromTime('');
-      setToTime('');
-      setDuration('');
-
-      frm.reset();
-
-    } catch (error) {
-      console.error(error.message);
-    }
-
-  }
-
-  const onClickClear = (i) => {
-
-    try {
-      setList([]);
-      if (i == 0) {
-        toast.info(`Tasks array cleared`);
-        clearForm();
-      } else {
-        if (list == [] || list.length == 0 || list == undefined) {
-          toast.warning(`Nothing recorded`);
-          clearForm();
-        } else {
-          toast.success(`Tasks recorded`, {
-            // Set to 15sec 
-            position: toast.POSITION.TOP_CENTER, autoClose: 4000
-          });
-          clearForm();
-        }
-
-      }
-
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
 
 
   return (
@@ -215,13 +115,13 @@ const addTimesheet = () => {
         </div>
 
         {/* list of view entry */}
-        <ViewEntry list={list} onDelete={handleDelete} onDeleteSubmit={onClickClear} />
+        <ViewEntry list={list} />
 
 
         {/* modal side pop up */}
         <div>
           <Transition.Root key={[modalSelected]} show={open} as={Fragment}>
-            <Dialog as="div" className="fixed overflow-hidden inset-y-12" onClose={setOpen}>
+            <Dialog as="div" className="fixed overflow-y-auto inset-y-12" onClose={setOpen}>
               <div className="absolute inset-0 overflow-hidden">
                 <Dialog.Overlay className="absolute inset-0" />
 
@@ -236,7 +136,7 @@ const addTimesheet = () => {
                     leaveTo="translate-x-full"
                   >
                     <div className="w-screen max-w-md pointer-events-auto">
-                      <form onSubmit={handleChange} name='task_form' id='form_id_1'
+                      <form name='task_form' id='form_id_1'
                         className="flex flex-col h-full bg-white divide-y divide-gray-200 shadow-xl">
                         <div className="flex flex-col flex-1 min-h-0 overflow-auto">
                           <div className="px-4 py-6 bg-indigo-700 sm:px-6">
@@ -262,7 +162,7 @@ const addTimesheet = () => {
                           <div className="flex flex-col justify-between flex-1">
                             <div className="px-4 divide-y divide-gray-200 sm:px-6">
                               <div className="pt-6 pb-5 space-y-6">
-                                {/* <div>
+                                <div>
                                   <label htmlFor="project-name" className="block text-sm font-medium text-gray-900">
                                     Project name
                                   </label>
@@ -274,8 +174,8 @@ const addTimesheet = () => {
                                       className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div>
-                                </div> */}
-                                {/* <div>
+                                </div>
+                                <div>
                                   <label htmlFor="entry-date" className="block text-sm font-medium text-gray-900">
                                     Entry Date
                                   </label>
@@ -287,7 +187,7 @@ const addTimesheet = () => {
                                       className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
                                   </div>
-                                </div> */}
+                                </div>
                                 <div>
                                   <label htmlFor="input_duration" className="block text-sm font-medium text-gray-900">
                                     {' '}
@@ -427,12 +327,13 @@ const addTimesheet = () => {
                           <button
                             type="button"
                             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                            onClick={() => clearForm()} >
+                          //onClick={() => clearForm()} 
+                          >
                             Clear
                           </button>
                           <button
                             type="submit"
-                            onClick={() => handleChange()}
+                            //onClick={() => handleChange()}
                             className="inline-flex justify-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" >
                             Add
                           </button>
@@ -470,4 +371,4 @@ const addTimesheet = () => {
 //   }
 // }
 
-export default addTimesheet
+export default addTimesheet1

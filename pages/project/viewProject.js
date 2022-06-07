@@ -7,6 +7,7 @@ import fetch from 'isomorphic-unfetch'
 import AddProject from '../project/addProject'
 import EditProject from '../project/editProject'
 
+
 const viewProject = ({ projects, id }) => {
 
     console.log(projects.data)

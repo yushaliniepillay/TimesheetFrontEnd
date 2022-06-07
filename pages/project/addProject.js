@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 // import { Button, Modal, ModalBody, ModalFooter } from "reactstrap"
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckCircleIcon, XIcon } from '@heroicons/react/solid'
 import { ClipboardCheckIcon } from '@heroicons/react/outline'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -31,35 +31,7 @@ const viewProject = ({ projects, id }) => {
     function className(...classes) {
         return classes.filter(Boolean).join(' ')
     }
-    
 
-    //update new record in strapi
-    async function editProj(e) {
-        e.preventDefault();
-        const projectInfo = {
-            data: {
-                Title: Title,
-                ClientName: ClientName,
-                DateAdded: DateAdded,
-                Description: Description
-            }
-
-        }
-        const { API_URL } = process.env
-        console.log(JSON.stringify(projectInfo));
-
-        const update = await fetch(`${API_URL}/api/projects/${id}`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(projectInfo)
-        })
-
-        const updateResponse = await update.json()
-
-        console.log(updateResponse)
-    }
 
     return (
         <div>

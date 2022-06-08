@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react'
+import { render } from "react-dom";
 import { Dialog, Transition, Listbox } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { PlusSmIcon, CheckIcon, SelectorIcon } from '@heroicons/react/solid'
@@ -6,6 +7,7 @@ import moment from 'moment'
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import ViewEntry from './viewEntry'
+
 
 let id = 0;
 const initialList = [];
@@ -32,14 +34,31 @@ const addTimesheet1 = () => {
   }
 
   const [list, setList] = useState(initialList);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("description...");
-  const [ts_date, setTs_Date] = useState(new Date());
-  const [fromTime, setFromTime] = useState(setHours(setMinutes(new Date(), 0), 9));
-  const [toTime, setToTime] = useState(setHours(setMinutes(new Date(), 30), 18));
-  const [duration, setDuration] = useState("");
-  const [selected, setSelected] = useState(activityType)
+  // const [title, setTitle] = useState("");
+  // const [description, setDescription] = useState("description...");
+  // const [ts_date, setTs_Date] = useState(new Date());
+  // const [fromTime, setFromTime] = useState(setHours(setMinutes(new Date(), 0), 9));
+  // const [toTime, setToTime] = useState(setHours(setMinutes(new Date(), 30), 18));
+  // const [duration, setDuration] = useState("");
+  // const [selected, setSelected] = useState(activityType)
 
+  const [values, setValues] = React.useState({
+    title: "",
+    description: "",
+    date: "",
+    fromTime: (setHours(setMinutes(new Date(), 0), 9)),
+    toTime: (setHours(setMinutes(new Date(), 30), 18)),
+    duration: "",
+    selected: (activityType)
+  });
+
+  const { title, description, date, fromTime, toTime, duration, selected } = values;
+
+  const handleInputChange = (index, event) => {
+    console.log(index, event.target.name)
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  }
 
   const tabs = [
     { name: 'List of Timesheet', href: '/timesheet/viewTimesheet', current: false },
@@ -159,169 +178,187 @@ const addTimesheet1 = () => {
                               </p>
                             </div>
                           </div>
-                          <div className="flex flex-col justify-between flex-1">
-                            <div className="px-4 divide-y divide-gray-200 sm:px-6">
-                              <div className="pt-6 pb-5 space-y-6">
-                                <div>
-                                  <label htmlFor="project-name" className="block text-sm font-medium text-gray-900">
-                                    Project name
-                                  </label>
-                                  <div className="mt-1">
-                                    <input
-                                      type="text"
-                                      value={title}
-                                      onChange={e => setTitle(e.target.value)}
-                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    />
-                                  </div>
-                                </div>
-                                <div>
-                                  <label htmlFor="entry-date" className="block text-sm font-medium text-gray-900">
-                                    Entry Date
-                                  </label>
-                                  <div className="mt-1">
-                                    <input
-                                      type="date"
-                                      value={ts_date}
-                                      onChange={e => setTs_Date(e.target.value)}
-                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    />
-                                  </div>
-                                </div>
-                                <div>
-                                  <label htmlFor="input_duration" className="block text-sm font-medium text-gray-900">
-                                    {' '}
-                                    Duration{' '}
-                                  </label>
-                                  <div className="mt-1">
-                                    <input
-                                      type="number"
-                                      step={0.01}
-                                      max='23.59'
-                                      min='0'
-                                      id="input_duration"
-                                      value={duration}
-                                      onChange={e => setDuration(e.target.value)}
-                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    />
-                                  </div>
-                                </div>
-                                {/* <div>
-                                  <label htmlFor="input_startTime" className="block text-sm font-medium text-gray-900">
-                                    {' '}
-                                    Start Time{' '}
-                                  </label>
-                                  <div className="mt-1">
-                                    <input
-                                      type="time"
-                                      id="input_startTime"
-                                      value={fromTime}
-                                      onChange={e => setFromTime(e.target.value)}
-                                      className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    />
-                                  </div> 
-                                </div>*/}
-                                {/* <div>
-                                  <label htmlFor="input_endTime" className="block text-sm font-medium text-gray-900">
-                                    {' '}
-                                    End Time{' '}
-                                  </label>
-                                  <div className="mt-1">
-                                    <input
-                                      type="time"
-                                      id="input_endTime"
-                                      value={toTime}
-                                      minTime={fromTime}
-                                      onChange={e => setToTime(e.target.value)}
-                                      className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    />
-                                  </div>
-                                </div> */}
+                          {values.map((value, index) => {
+                            
+                              <div key={value.id} className="flex flex-col justify-between flex-1">
+                                <div className="px-4 divide-y divide-gray-200 sm:px-6">
+                                  <div className="pt-6 pb-5 space-y-6">
+                                    <div>
+                                      <label htmlFor="project-name" className="block text-sm font-medium text-gray-900">
+                                        Project name
+                                      </label>
+                                      <div className="mt-1">
+                                        <input
+                                          type="text"
+                                          id="title"
+                                          value={value.title}
+                                          onChange={event => handleInputChange(index, event)}
+                                          // value={title}
+                                          // onChange={e => setTitle(e.target.value)}
+                                          className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label htmlFor="entry-date" className="block text-sm font-medium text-gray-900">
+                                        Entry Date
+                                      </label>
+                                      <div className="mt-1">
+                                        <input
+                                          type="date"
+                                          id="date"
+                                          value={date}
+                                          onChange={handleInputChange}
+                                          // value={ts_date}
+                                          // onChange={e => setTs_Date(e.target.value)}
+                                          className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label htmlFor="input_duration" className="block text-sm font-medium text-gray-900">
+                                        {' '}
+                                        Duration{' '}
+                                      </label>
+                                      <div className="mt-1">
+                                        <input
+                                          type="number"
+                                          step={0.01}
+                                          max='23.59'
+                                          min='0'
+                                          id="input_duration"
+                                          value={duration}
+                                          onChange={handleInputChange}
+                                          //onChange={e => setDuration(e.target.value)}
+                                          className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label htmlFor="input_startTime" className="block text-sm font-medium text-gray-900">
+                                        {' '}
+                                        Start Time{' '}
+                                      </label>
+                                      <div className="mt-1">
+                                        <input
+                                          type="time"
+                                          id="input_startTime"
+                                          value={fromTime}
+                                          onChange={handleInputChange}
+                                          //onChange={e => setFromTime(e.target.value)}
+                                          className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label htmlFor="input_endTime" className="block text-sm font-medium text-gray-900">
+                                        {' '}
+                                        End Time{' '}
+                                      </label>
+                                      <div className="mt-1">
+                                        <input
+                                          type="time"
+                                          id="input_endTime"
+                                          value={toTime}
+                                          minTime={fromTime}
+                                          onChange={handleInputChange}
+                                          //onChange={e => setToTime(e.target.value)}
+                                          className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        />
+                                      </div>
+                                    </div>
 
-                                {/* Activity type */}
-                                <div>
-                                  <label htmlFor="activity-type" className="block text-sm font-medium text-gray-900">
-                                    {' '}
-                                    Activity Type{' '}
-                                  </label>
-                                  <div className="mt-1">
+                                    {/* Activity type */}
+                                    <div>
+                                      <label htmlFor="activity-type" className="block text-sm font-medium text-gray-900">
+                                        {' '}
+                                        Activity Type{' '}
+                                      </label>
+                                      <div className="mt-1">
 
-                                    <Listbox value={selected} onChange={setSelected} >
-                                      {({ open }) => (
-                                        <>
-                                          {/* <Listbox.Label className="block text-sm font-medium text-gray-700">Activity Type</Listbox.Label> */}
+                                        <Listbox
+                                          value={selected}
+                                          onChange={handleInputChange} >
+                                          {/* onChange={setSelected} > */}
+                                          {({ open }) => (
+                                            <>
+                                              {/* <Listbox.Label className="block text-sm font-medium text-gray-700">Activity Type</Listbox.Label> */}
 
-                                          <Listbox.Button className="relative block w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                            <span className="block truncate">{selected.name}</span>
-                                            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                              <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                                            </span>
-                                          </Listbox.Button>
+                                              <Listbox.Button className="relative block w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <span className="block truncate">{selected.name}</span>
+                                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                                  <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                                                </span>
+                                              </Listbox.Button>
 
-                                          <Transition
-                                            show={open}
-                                            as={Fragment}
-                                            leave="transition ease-in duration-100"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0"
-                                          >
-                                            <Listbox.Options className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                              {activityType.map((acttype) => (
-                                                <Listbox.Option
-                                                  key={acttype.id}
-                                                  className={({ active }) =>
-                                                    className(
-                                                      active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                                                      'cursor-default select-none relative py-2 pl-3 pr-9'
-                                                    )
-                                                  }
-                                                  value={acttype}
-                                                >
-                                                  {({ selected, active }) => (
-                                                    <>
-                                                      <span className={className(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                        {acttype.name}
-                                                      </span>
+                                              <Transition
+                                                show={open}
+                                                as={Fragment}
+                                                leave="transition ease-in duration-100"
+                                                leaveFrom="opacity-100"
+                                                leaveTo="opacity-0"
+                                              >
+                                                <Listbox.Options className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                  {activityType.map((acttype) => (
+                                                    <Listbox.Option
+                                                      key={acttype.id}
+                                                      className={({ active }) =>
+                                                        className(
+                                                          active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                                          'cursor-default select-none relative py-2 pl-3 pr-9'
+                                                        )
+                                                      }
+                                                      value={acttype}
+                                                    >
+                                                      {({ selected, active }) => (
+                                                        <>
+                                                          <span className={className(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                            {acttype.name}
+                                                          </span>
 
-                                                      {selected ? (
-                                                        <span
-                                                          className={className(
-                                                            active ? 'text-white' : 'text-indigo-600',
-                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                          )}
-                                                        >
-                                                          <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                                                        </span>
-                                                      ) : null}
-                                                    </>
-                                                  )}
-                                                </Listbox.Option>
-                                              ))}
-                                            </Listbox.Options>
-                                          </Transition>
-                                        </>
-                                      )}
-                                    </Listbox>
-                                  </div>
-                                </div>
+                                                          {selected ? (
+                                                            <span
+                                                              className={className(
+                                                                active ? 'text-white' : 'text-indigo-600',
+                                                                'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                              )}
+                                                            >
+                                                              <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                                                            </span>
+                                                          ) : null}
+                                                        </>
+                                                      )}
+                                                    </Listbox.Option>
+                                                  ))}
+                                                </Listbox.Options>
+                                              </Transition>
+                                            </>
+                                          )}
+                                        </Listbox>
+                                      </div>
+                                    </div>
 
-                                <div>
-                                  <label htmlFor="description" className="block text-sm font-medium text-gray-900">
-                                    {' '}
-                                    Description{' '}
-                                  </label>
-                                  <div className="mt-1">
-                                    <textarea
-                                      placeholder="Task Description..."
-                                      onChange={e => setDescription(e.target.value)}
-                                      rows={3}
-                                      className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    />
+                                    <div>
+                                      <label htmlFor="description" className="block text-sm font-medium text-gray-900">
+                                        {' '}
+                                        Description{' '}
+                                      </label>
+                                      <div className="mt-1">
+                                        <textarea
+                                          placeholder="Task Description..."
+                                          type="text"
+                                          value={description}
+                                          onChange={handleInputChange}
+                                          //onChange={e => setDescription(e.target.value)}
+                                          rows={3}
+                                          className="block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        />
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
+                          })}
                         </div>
                         <div className="flex justify-end flex-shrink-0 px-4 py-4">
                           <button
@@ -333,7 +370,7 @@ const addTimesheet1 = () => {
                           </button>
                           <button
                             type="submit"
-                            //onClick={() => handleChange()}
+                            onClick={() => setValues()}
                             className="inline-flex justify-center px-4 py-2 ml-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" >
                             Add
                           </button>
@@ -345,10 +382,10 @@ const addTimesheet1 = () => {
               </div>
             </Dialog>
           </Transition.Root>
-        </div>
+        </div >
 
-      </div>
-    </div>
+      </div >
+    </div >
 
 
   )

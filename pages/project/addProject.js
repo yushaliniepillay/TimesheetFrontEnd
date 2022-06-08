@@ -70,44 +70,44 @@ const addProject = () => {
 
 
     //insert new record in strapi
-    async function addProj() {
+    // async function addProj() {
 
-        const projectInfo = {
-            data: {
-                Title: projectTitle,
-                ClientName: clientName,
-                DateAdded: projectDate,
-                Description: projectDescription
-            }
+    //     const projectInfo = {
+    //         data: {
+    //             Title: projectTitle,
+    //             ClientName: clientName,
+    //             DateAdded: projectDate,
+    //             Description: projectDescription
+    //         }
 
-        }
-        const { API_URL } = process.env
-        console.log(JSON.stringify(projectInfo));
+    //     }
+    //     const { API_URL } = process.env
+    //     console.log(JSON.stringify(projectInfo));
 
-        const add = await fetch(`${API_URL}/api/projects`, {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(projectInfo)
-        })
-        const emptyFieldCheck = Object.values(projectInfo).some((element) => element === "");
-        if (emptyFieldCheck) {
-            toast.error("Please fill all the Input Field")
-        }
+    //     const add = await fetch(`${API_URL}/api/projects`, {
+    //         method: "POST",
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(projectInfo)
+    //     })
+    //     const emptyFieldCheck = Object.values(projectInfo).some((element) => element === "");
+    //     if (emptyFieldCheck) {
+    //         toast.error("Please fill all the Input Field")
+    //     }
 
-        if (!add.ok) {
-            toast.error("Something went wrong!")
-        } else {
-            const addResponse = await add.json()
+    //     if (!add.ok) {
+    //         toast.error("Something went wrong!")
+    //     } else {
+    //         const addResponse = await add.json()
 
-            toast.success('Sucessfully added');
-            console.log(addResponse)
-            location.reload()
-        }
+    //         toast.success('Sucessfully added');
+    //         console.log(addResponse)
+    //         location.reload()
+    //     }
 
-    }
+    // }
 
     //modal pop up 
     const [modalFormOpen, setModalFormOpen] = React.useState(false)
